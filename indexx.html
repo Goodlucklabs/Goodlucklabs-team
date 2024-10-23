@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Identity Verification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url(hero_bg.png);
+            user-select: none; /* Standard syntax */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+        }
+        header {
+            width: 100%;
+            padding: 10px;
+            background-color: #ffffff14;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        header img {
+            max-width: 50px;
+            margin-left: 20px;
+        }
+        .support-btn {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1e293b; /* Dark slate */
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6); /* Shadow effect */
+            margin-right: 20px;
+        }
+
+        .btn-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            background: radial-gradient(
+            75% 100% at 50% 0%,
+            rgba(56, 189, 248, 0.6) 0%,
+            rgba(56, 189, 248, 0) 75%
+        );
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        .support-btn:hover .btn-overlay {
+            opacity: 1;
+        }  
+
+        .btn-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 15px;
+            border-radius: 50px;
+            z-index: 2;
+        }
+
+        .support-btn svg {
+            stroke: #fff;
+        }
+
+        .btn-bottom-line {
+            position: absolute;
+            bottom: 0;
+            left: 18px;
+            height: 1px;
+            width: calc(100% - 36px);
+            background: linear-gradient(
+            to right,
+            rgba(16, 185, 129, 0) 0%,
+            rgba(16, 185, 129, 0.9) 50%,
+            rgba(16, 185, 129, 0) 100%
+        );
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        }
+
+        .support-btn:hover .btn-bottom-line {
+            opacity: 0.4;
+        }
+
+        .verification-box {
+            background-color: #ffffff17;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            
+        }
+
+        .verification-box h2 {
+            margin-bottom: 25px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #0077cc;
+            border-radius: 5px;
+        }
+
+        .submit-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #22023d; /* Customize the color */
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    border: none; /* Removes border from button */
+}
+
+.submit-btn .btn-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    background: radial-gradient(
+        75% 100% at 50% 0%,
+        rgba(0, 119, 204, 0.6) 0%,
+        rgba(0, 119, 204, 0) 75%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+}
+
+.submit-btn:hover .btn-overlay {
+    opacity: 1;
+}
+
+.submit-btn .btn-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 5px 15px;
+    border-radius: 50px;
+    z-index: 2;
+}
+
+.submit-btn svg {
+    stroke: #fff;
+}
+
+.submit-btn .btn-bottom-line {
+    position: absolute;
+    bottom: 0;
+    left: 18px;
+    height: 1px;
+    width: calc(100% - 36px);
+    background: linear-gradient(
+        to right,
+        rgba(0, 119, 204, 0) 0%,
+        rgba(0, 119, 204, 0.9) 50%,
+        rgba(0, 119, 204, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.submit-btn:hover .btn-bottom-line {
+    opacity: 0.4;
+}
+
+        .identity-card {
+            display: none;
+            background-color: #ffffff17;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+
+        .identity-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .unknown-message {
+            display: none;
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .footer {
+    width: 100%;
+    padding: 10px;
+    background-color: #ffffff00; /* Match the header color */
+    color: white;
+    text-align: center;
+    position: fixed; /* Fixed position to stay at the bottom */
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Ensure it stays on top of other content */
+}
+
+        /* Media query for mobile responsiveness */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+            header img {
+                margin-left: 20px;
+                margin-bottom: 10px;
+            }
+            .support-btn {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            body {
+                padding: 20px;
+                height: auto;
+            }
+            .verification-box {
+                margin-top: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <img src="logo.png" alt="Company Logo">
+        <a href="mailto:goodlucklabs@gmail.com" class="support-btn">
+            <span class="btn-overlay"></span>
+            <span class="btn-content">
+              Support
+              <svg
+                fill="none"
+                height="16"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10.75 8.75L14.25 12L10.75 15.25"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.5"
+                />
+              </svg>
+            </span>
+            <span class="btn-bottom-line"></span>
+          </a>
+          
+    </header>
+
+    <!-- Verification Box -->
+    <div class="verification-box">
+        <h2>Employee Identity Verification</h2>
+        <input type="text" id="employeeId" placeholder="Enter Employee ID">
+        <button class="submit-btn" onclick="verifyEmployee()">
+            <span class="btn-overlay"></span>
+            <span class="btn-content">
+                Verify
+                <svg
+                    fill="none"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                      d="M10.75 8.75L14.25 12L10.75 15.25"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.5"
+                    />
+                </svg>
+            </span>
+            <span class="btn-bottom-line"></span>
+        </button>
+    </div>
+
+    <!-- Identity Card -->
+    <div class="identity-card" id="identityCard">
+        <img src="https://via.placeholder.com/80" id="employeePhoto" alt="Employee Photo">
+        <h3 id="employeeName">John Doe</h3>
+        <p id="employeeRole">Software Engineer</p>
+        <p id="employeeEmail">john.doe@goodlucklabs.com</p>
+    </div>
+
+    <!-- Unknown Identity Message -->
+    <p class="unknown-message" id="unknownMessage">Unknown Identity</p>
+
+    <script>
+        // Mock database of employees
+        const employees = {
+            '1896732589': {
+                name: 'Payal Tewary',
+                role: 'Sales Executive, Goodluck',
+                email: 'payal.tewary@goodlucklabs.com',
+                photo: 'payal.png'
+            },
+            '67890': {
+                name: 'John Doe',
+                role: 'Software Engineer',
+                email: 'john.doe@goodlucklabs.com',
+                photo: 'https://via.placeholder.com/80?text=JD'
+            }
+        };
+
+        // Function to verify employee
+        function verifyEmployee() {
+            const employeeId = document.getElementById('employeeId').value;
+            const identityCard = document.getElementById('identityCard');
+            const unknownMessage = document.getElementById('unknownMessage');
+
+            if (employees[employeeId]) {
+                const employee = employees[employeeId];
+                
+                // Show identity card with employee details
+                document.getElementById('employeePhoto').src = employee.photo;
+                document.getElementById('employeeName').textContent = employee.name;
+                document.getElementById('employeeRole').textContent = employee.role;
+                document.getElementById('employeeEmail').textContent = employee.email;
+                
+                identityCard.style.display = 'block';
+                unknownMessage.style.display = 'none';
+            } else {
+                // Show unknown identity message
+                identityCard.style.display = 'none';
+                unknownMessage.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    document.onkeydown = function(e) {
+        if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+            e.preventDefault();
+        }
+    };
+    </script>
+<!-- Footer -->
+<footer class="footer">
+    © 2024 Goodluck Labs. All rights reserved.
+</footer>
+
+</body>
+</html>
